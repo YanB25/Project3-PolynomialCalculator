@@ -15,13 +15,16 @@ const string polynomial::pattern_iterate_ = "\\(-?(\\d+\\.)?\\d+,\\s?\\d+\\)";
 regex polynomial::regex_(polynomial::pattern_);
 regex polynomial::regex_iterate_(polynomial::pattern_iterate_);
 
-polynomial::polynomial(string& s) {
+polynomial::polynomial(string s) : polynomial() {
     regex_iterator<string::iterator> rit (s.begin(),s.end(),regex_iterate_);
     regex_iterator<string::iterator> rend;
-    while (rit!=rend) {
-        double a, b;
-        sscanf(rit->str().c_str(), "(%lf, %lf)", &a, &b);
-        cout << a << " " << b << endl;
+    while (rit != rend) {
+        double co, de;
+        sscanf(rit->str().c_str(), "(%lf, %lf)", &co, &de);
+        if (de > getDegree()) {
+            setDegree(de);
+        }
+        coefficient_[de] = co;
         ++rit;
     }
 }
@@ -83,7 +86,7 @@ polynomial polynomial::operator*(double num) const {
 
 polynomial polynomial::operator*(const self& rhs) const {
     polynomial ret;
-    int degree = std::max(getDegree(), rhs.getDegree());
+    int degree = getDegree() + rhs.getDegree();
     ret.setDegree(degree);
     for (int i = 0; i <= degree; ++i) {
         for (int j = 0; j <= i; ++j) {
@@ -156,8 +159,15 @@ double polynomial::evaluate(double x) const {
     return sum;
 }
 
-
-
+polynomial polynomial::derivation() const {
+    polynomial dev;
+    size_t degree = getDegree() - 1;
+    dev.setDegree(degree);
+    for (int i = degree; i >= 0; --i) {
+        dev.getCoefficient()[i] = (i + 1) * getCoefficient()[i + 1];
+    }
+    return dev;
+}
 
 
 
