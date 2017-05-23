@@ -1,5 +1,6 @@
 #include "polynomial.hpp"
 #include <iostream>
+#include <cstdio>
 #include <algorithm>
 #include <cstddef>
 #include <cmath>
@@ -7,6 +8,23 @@ using std::max;
 using std::cin;
 using std::cout;
 using std::endl;
+using std::regex_iterator;
+
+const string polynomial::pattern_ = "^(([a-zA-Z]+\\s?=\\s?)?(\\(-?(\\d+\\.)?\\d+,\\s?\\d+\\))+)$";
+const string polynomial::pattern_iterate_ = "\\(-?(\\d+\\.)?\\d+,\\s?\\d+\\)";
+regex polynomial::regex_(polynomial::pattern_);
+regex polynomial::regex_iterate_(polynomial::pattern_iterate_);
+
+polynomial::polynomial(string& s) {
+    regex_iterator<string::iterator> rit (s.begin(),s.end(),regex_iterate_);
+    regex_iterator<string::iterator> rend;
+    while (rit!=rend) {
+        double a, b;
+        sscanf(rit->str().c_str(), "(%lf, %lf)", &a, &b);
+        cout << a << " " << b << endl;
+        ++rit;
+    }
+}
 void polynomial::shrink_() {
     while(coefficient_.size() != 0 && coefficient_.back() == 0) {
         coefficient_.pop_back();
@@ -20,6 +38,7 @@ polynomial& polynomial::operator+=(const self& rhs) {
     for (size_t i = 0; i <= rhs.getDegree(); ++i) {
         coefficient_[i] += rhs.getCoefficient()[i];
     }
+    shrink_();
     return (*this);
 }
 
@@ -52,12 +71,28 @@ polynomial& polynomial::operator*=(double num) {
     for (auto& i : coefficient_) {
         i *= num;
     }
+    shrink_();
     return *this;
 }
 
 polynomial polynomial::operator*(double num) const {
     polynomial ret(*this);
     ret *= num;
+    return ret;
+}
+
+polynomial polynomial::operator*(const self& rhs) const {
+    polynomial ret;
+    int degree = std::max(getDegree(), rhs.getDegree());
+    ret.setDegree(degree);
+    for (int i = 0; i <= degree; ++i) {
+        for (int j = 0; j <= i; ++j) {
+            if (j <= (int)getDegree() && i - j <= (int)rhs.getDegree()) {
+                ret.getCoefficient()[i] += getCoefficient()[j] * rhs.getCoefficient()[i - j];
+            }
+        }
+    }
+    ret.shrink_();
     return ret;
 }
 
@@ -113,9 +148,13 @@ ostream& operator<<(ostream& os, const polynomial& rhs) {
     return os;
 }
 
-
-
-
+double polynomial::evaluate(double x) const {
+    double sum = 0;
+    for (size_t i = 0; i <= getDegree(); ++i) {
+        sum += coefficient_[i] * pow(x, i);
+    }
+    return sum;
+}
 
 
 
