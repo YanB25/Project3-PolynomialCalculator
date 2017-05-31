@@ -100,14 +100,22 @@ polynomial polynomial::operator*(const self& rhs) const {
 }
 
 bool polynomial::operator==(const self& rhs) const {
-    for (size_t i = 0; i <= getDegree(); ++i) {
+    size_t min_degree = std::min(getDegree(), rhs.getDegree());
+    for (size_t i = 0; i <= min_degree; ++i) {
         if (coefficient_[i] != rhs.getCoefficient()[i]) {
+            //cout << "ne " << i << " " << coefficient_[i] << " " << rhs.coefficient_[i] << endl; //TODO
             return false;
         }
     }
 
-    for (size_t i = getDegree(); i < rhs.getDegree(); ++i) {
+    for (size_t i = min_degree + 1; i < rhs.getDegree(); ++i) {
         if (rhs.getCoefficient()[i] != 0) {
+            //cout << "ne2 " << i << rhs.get
+            return false;
+        }
+    }
+    for (size_t i = min_degree + 1; i < getDegree(); ++i) {
+        if (getCoefficient()[i] != 0) {
             return false;
         }
     }
@@ -118,8 +126,12 @@ ostream& operator<<(ostream& os, const polynomial& rhs) {
     bool has_reach_nonzero = false;
     size_t degree = rhs.getDegree();
     const auto& coefficient = rhs.getCoefficient();
+    if (coefficient.size() == 0) {
+        cout << "0";
+        return os;
+    }
     if (degree == 0) {
-        os << "0";
+        cout << coefficient[0];
         return os;
     }
     for (int i = rhs.getDegree(); i >= 1; i--) {

@@ -24,27 +24,48 @@ void PrintHelp() {
      cout << "\t<4> multiply polynomial by a constant" << endl;
      cout << "\t<5> evaluate" << endl;
      cout << "\t<6> show all store polynomial" << endl;
+     cout << "\t<7> multiply polynomial by a polynomail" << endl;
+     cout << "\t<8> judge whether two polynomial equal" << endl;
+     cout << "\t<11> get derivation of a polynomial" << endl;
      cout << endl;
 }
 
-poly_pair getPolyPair() {
-    polynomial first = getOnePoly();
-    polynomial second = getOnePoly();
+poly_pair getPolyPair(const map_t& map) {
+    polynomial first = getOnePoly(map);
+    polynomial second = getOnePoly(map);
     poly_pair p(first, second);
     return p;
 }
 
-polynomial getOnePoly() {
+polynomial getOnePoly(const map_t& map) {
     string input;
     cout << "input polynomial: " << endl;
     PrintPromtForInput();
     getline(cin, input);
-    while (!polynomial::isValid(input)) {
-        PrintError("Error: invalid input");
+    while (!polynomial::isValid(input) && map.find(input) == map.end()) {
+        PrintError("Error: invalid input or not this name");
         PrintPromtForInput();
         getline(cin ,input);
     }
-    polynomial poly(input);
-    cout << poly << endl;
-    return poly;
+    if (map.find(input) != map.end()) {
+        polynomial poly(map.find(input)->second);
+        cout << poly << endl;
+        return poly;
+    }  else {
+        polynomial poly(input);
+        cout << poly << endl;
+        return poly;
+    }
+}
+
+bool savePoly(map_t& map, const polynomial& poly) {
+    PrintPromtForInput();
+    string input;
+    if (cin.peek() == '\n') {
+        cin.get();
+        return false;
+    }
+    getline(cin, input);
+    map[input] = poly;
+    return true;
 }

@@ -6,6 +6,8 @@
 #include <string>
 #include <utility>
 #include "polynomial.hpp"
+#include <map>
+using std::map;
 using std::ostream;
 using std::endl;
 using std::cout;
@@ -13,6 +15,7 @@ using std::cerr;
 using std::cin;
 using std::string;
 using std::pair;
+typedef map<string, polynomial> map_t;
 typedef pair<polynomial, polynomial> poly_pair;
 //used to print error message
 //s means error message
@@ -30,6 +33,7 @@ inline void PrintPromtForInput() {
     cout << "... ";
 }
 
-poly_pair getPolyPair();
-polynomial getOnePoly();
+poly_pair getPolyPair(const map_t& map);
+polynomial getOnePoly(const map_t& map);
+bool savePoly(map_t& map, const polynomial& poly);
 #endif
