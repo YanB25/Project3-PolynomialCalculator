@@ -10,6 +10,8 @@ using std::left;
 using std::setw;
 using std::string;
 using std::cin;
+using std::smatch;
+using std::regex_search;
 
 void PrintInstroduction() {
     cout << "\tWelcome to Polynomial Calculator" << endl;
@@ -30,14 +32,14 @@ void PrintHelp() {
      cout << endl;
 }
 
-poly_pair getPolyPair(const map_t& map) {
+poly_pair getPolyPair(map_t& map) {
     polynomial first = getOnePoly(map);
     polynomial second = getOnePoly(map);
     poly_pair p(first, second);
     return p;
 }
 
-polynomial getOnePoly(const map_t& map) {
+polynomial getOnePoly(map_t& map) {
     string input;
     cout << "input polynomial: " << endl;
     PrintPromtForInput();
@@ -54,6 +56,10 @@ polynomial getOnePoly(const map_t& map) {
     }  else {
         polynomial poly(input);
         cout << poly << endl;
+        smatch m;
+        if (regex_search(input, m, polynomial::regex_poly_name_)) {
+            map[m[0]] = poly;
+        }
         return poly;
     }
 }

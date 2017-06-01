@@ -12,8 +12,10 @@ using std::regex_iterator;
 
 const string polynomial::pattern_ = "^(([a-zA-Z]+\\s?=\\s?)?(\\(-?(\\d+\\.)?\\d+,\\s?\\d+\\))+)$";
 const string polynomial::pattern_iterate_ = "\\(-?(\\d+\\.)?\\d+,\\s?\\d+\\)";
+const string polynomial::poly_name_pattern_ = "[a-zA-Z]+";
 regex polynomial::regex_(polynomial::pattern_);
 regex polynomial::regex_iterate_(polynomial::pattern_iterate_);
+regex polynomial::regex_poly_name_(polynomial::poly_name_pattern_);
 
 polynomial::polynomial(string s) : polynomial() {
     regex_iterator<string::iterator> rit (s.begin(),s.end(),regex_iterate_);

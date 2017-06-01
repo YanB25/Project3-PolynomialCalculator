@@ -39,13 +39,15 @@ public:
 
     static bool isValid(const string& s) { return regex_search(s, regex_); }
     double evaluate(double) const;
-private:
-    coefficient_t coefficient_;
 
     static const string pattern_;
     static const string pattern_iterate_;
+    static const string poly_name_pattern_;
     static regex regex_;
     static regex regex_iterate_;
+    static regex regex_poly_name_;
+private:
+    coefficient_t coefficient_;
     //static self parse_(const string& s);
     void shrink_();
 };

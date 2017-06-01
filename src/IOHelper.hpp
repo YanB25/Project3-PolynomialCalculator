@@ -33,7 +33,7 @@ inline void PrintPromtForInput() {
     cout << "... ";
 }
 
-poly_pair getPolyPair(const map_t& map);
-polynomial getOnePoly(const map_t& map);
+poly_pair getPolyPair(map_t& map);
+polynomial getOnePoly(map_t& map);
 bool savePoly(map_t& map, const polynomial& poly);
 #endif
