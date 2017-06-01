@@ -26,7 +26,7 @@ void PrintHelp() {
      cout << "\t<4> multiply polynomial by a constant" << endl;
      cout << "\t<5> evaluate" << endl;
      cout << "\t<6> show all store polynomial" << endl;
-     cout << "\t<7> multiply polynomial by a polynomail" << endl;
+     cout << "\t<7> multiply polynomial by a polynomial" << endl;
      cout << "\t<8> judge whether two polynomial equal" << endl;
      cout << "\t<11> get derivation of a polynomial" << endl;
      cout << endl;
@@ -72,6 +72,9 @@ bool savePoly(map_t& map, const polynomial& poly) {
         return false;
     }
     getline(cin, input);
+    if (!regex_match(input, polynomial::regex_poly_name_)) {
+        return false;
+    }
     map[input] = poly;
     return true;
 }
