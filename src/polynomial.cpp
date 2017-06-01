@@ -175,6 +175,10 @@ double polynomial::evaluate(double x) const {
 
 polynomial polynomial::derivation() const {
     polynomial dev;
+    if (getDegree() == 0) {
+        polynomial ret("(0, 0)");
+        return ret;
+    }
     size_t degree = getDegree() - 1;
     dev.setDegree(degree);
     for (int i = degree; i >= 0; --i) {
